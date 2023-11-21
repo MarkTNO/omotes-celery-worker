@@ -18,7 +18,7 @@ services:
       context: ./worker_type_a
       dockerfile: Dockerfile
     deploy:
-      replicas: 3
+      replicas: 10
     depends_on:
       rabbitmq:
         condition: service_healthy
