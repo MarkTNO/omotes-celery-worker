@@ -11,7 +11,7 @@ app = Celery(
 )
 
 
-@app.task(name='addTask')  # Named task
+@app.task(name='add-task')  # Named task
 def add(x, y):
     print('Task Add started')
     delay = 10 * random.random()

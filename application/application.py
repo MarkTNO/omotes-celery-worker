@@ -32,10 +32,10 @@ tasks_dict = {'type-a': [], 'type-b': []}
 threads = []
 for i in range(numTasks):
     if random.randint(0, 1) == 0:
-        task_name = 'addTask'
+        task_name = 'add-task'
         queue_name = 'type-a'
     else:
-        task_name = 'multiplyTask'
+        task_name = 'multiply-task'
         queue_name = 'type-b'
     t = threading.Thread(target=perform_task, args=(task_name, queue_name,))
     t.daemon = True

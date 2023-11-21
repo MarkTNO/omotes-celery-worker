@@ -11,8 +11,8 @@ app = Celery(
 )
 
 
-@app.task(name='multiplyTask')  # Named task
-def add(x, y):
+@app.task(name='multiply-task')  # Named task
+def multiply(x, y):
     print('Task Multiply started')
     delay = 10 * random.random()
     time.sleep(delay)  # Simulate a long task
