@@ -1,0 +1,57 @@
+version: "3.8"
+
+services:
+  application:
+    image: application
+    build:
+      context: ./application
+      dockerfile: Dockerfile
+    depends_on:
+      worker-a:
+        condition: service_started
+      worker-b:
+        condition: service_started
+
+  worker-a:
+    image: worker-type-a
+    build:
+      context: ./worker_type_a
+      dockerfile: Dockerfile
+    deploy:
+      replicas: 3
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+
+  worker-b:
+    image: worker-type-b
+    build:
+      context: ./worker_type_b
+      dockerfile: Dockerfile
+    deploy:
+      replicas: 1
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+
+  rabbitmq:
+    image: bitnami/rabbitmq:3.8.27
+    ports:
+      - "15672:15672"
+      - "5673:5672"
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:15672" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  flower:
+    image: mher/flower:0.9.7
+    environment:
+      - CELERY_BROKER_URL=amqp://user:bitnami@rabbitmq
+      - FLOWER_PORT=8888
+    ports:
+      - "8889:8888"
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
