@@ -4,11 +4,9 @@ import random
 
 from celery import Celery
 
-task_nr = 0
-
 
 def perform_task(t_name, q_name):
-    task_to_perform = app.signature(task_name, (i, 3), queue=queue_name).delay()
+    task_to_perform = app.signature(t_name, (i, 3), queue=queue_name).delay()
     result_perform = task_to_perform.get()
     global nr_of_completed_tasks
     global total_delay
@@ -27,7 +25,10 @@ app = Celery(
 
 start = time.time()
 numTasks = 100
+
 tasks_dict = {'type-a': [], 'type-b': []}
+nr_of_completed_tasks = 0
+total_delay = {'type-a': 0, 'type-b': 0}
 
 threads = []
 for i in range(numTasks):
@@ -42,9 +43,7 @@ for i in range(numTasks):
     threads.append(t)
     t.start()
 
-nr_of_completed_tasks = 0
-total_delay = {'type-a': 0, 'type-b': 0}
-
+# wait for all tasks to be completed
 for thr in threads:
     thr.join()
 
