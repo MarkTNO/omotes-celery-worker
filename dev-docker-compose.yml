@@ -33,5 +33,13 @@ services:
     environment:
       - CELERY_BROKER_URL=amqp://user:bitnami@rabbitmq
       - FLOWER_PORT=8888
+      - FLOWER_PERSISTENT=True
+      - FLOWER_STATE_SAVE_INTERVAL=10000 # save state every 10 seconds
+      - FLOWER_DB=/data/flower.db
+    volumes:
+      - flower_storage:/data
     ports:
       - "8889:8888"
+
+volumes:
+  flower_storage:

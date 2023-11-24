@@ -6,10 +6,10 @@ from celery import Celery
 
 
 def perform_task(t_name, q_name):
-    task_to_perform = app.signature(t_name, (i, 3), queue=queue_name).delay()
-    result_perform = task_to_perform.get()
     global nr_of_completed_tasks
     global total_delay
+    task_to_perform = app.signature(t_name, (nr_of_completed_tasks, 3), queue=q_name).delay()
+    result_perform = task_to_perform.get()
     nr_of_completed_tasks += 1
     total_delay[q_name] += result_perform
     print(f"Received result: '{result_perform}' from task nr: {nr_of_completed_tasks}, from queue: {q_name}")

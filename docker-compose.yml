@@ -41,7 +41,7 @@ services:
       - "5673:5672"
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:15672" ]
-      interval: 30s
+      interval: 10s
       timeout: 10s
       retries: 5
 
@@ -50,8 +50,16 @@ services:
     environment:
       - CELERY_BROKER_URL=amqp://user:bitnami@rabbitmq
       - FLOWER_PORT=8888
+      - FLOWER_PERSISTENT=True
+      - FLOWER_STATE_SAVE_INTERVAL=10000 # save state every 10 seconds
+      - FLOWER_DB=/data/flower.db
+    volumes:
+      - flower_storage:/data
     ports:
       - "8889:8888"
     depends_on:
       rabbitmq:
         condition: service_healthy
+
+volumes:
+  flower_storage:

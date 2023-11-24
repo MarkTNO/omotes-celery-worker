@@ -11,7 +11,6 @@ exec celery --app=worker worker \
             --loglevel=INFO \
             --hostname=worker-${WORKER_TYPE}@%h \
             --queues=${WORKER_TYPE} \
-            --uid=nobody --gid=nogroup
-
-#            --logfile=/var/log/celery/worker.log \
-#            --statedb=/var/run/celery/worker@%h.state \
+            --uid=nobody --gid=nogroup \
+            --logfile=/var/log/celery/worker.log \
+            --statedb=/var/run/celery/worker@%h.state \
