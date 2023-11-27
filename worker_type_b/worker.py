@@ -11,10 +11,13 @@ app = Celery(
 )
 
 
-@app.task(name='multiply-task')  # Named task
-def multiply(x, y):
+@app.task(name='multiply-task', bind=True)  # Named task
+def multiply(self, x, y):
     print('Task Multiply started')
     delay = 10 * random.random()
-    time.sleep(delay)  # Simulate a long task
+    print(f"self: {self}, x:  {x}, y: {y}")
+    for step in range(5):
+        time.sleep(delay / 5)  # Simulate a long task
+        self.update_state(state='PROGRESS', meta={'progress': step / 4})
     print('Task Multiply done')
     return delay

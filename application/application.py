@@ -3,12 +3,24 @@ import time
 import random
 
 from celery import Celery
+from celery.result import AsyncResult
+
+first_task = True
 
 
 def perform_task(t_name, q_name):
     global nr_of_completed_tasks
     global total_delay
     task_to_perform = app.signature(t_name, (nr_of_completed_tasks, 3), queue=q_name).delay()
+    global first_task
+    if first_task:  # print status of first task only
+        first_task = False
+        delay = 0
+        while delay < 10 and task_to_perform:
+            delay += 0.1
+            time.sleep(delay)  # print 10 times per second
+            print(f"============= TASK PROGRESS: {task_to_perform.info}")
+
     result_perform = task_to_perform.get()
     nr_of_completed_tasks += 1
     total_delay[q_name] += result_perform

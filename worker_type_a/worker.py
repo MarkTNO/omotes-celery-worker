@@ -11,10 +11,12 @@ app = Celery(
 )
 
 
-@app.task(name='add-task')  # Named task
-def add(x, y):
+@app.task(name='add-task', bind=True)  # Named task
+def add(self, x, y):
     print('Task Add started')
     delay = 10 * random.random()
-    time.sleep(delay)  # Simulate a long task
+    for step in range(5):
+        time.sleep(delay / 5)  # Simulate a long task
+        self.update_state(state='PROGRESS', meta={'progress': step / 4})
     print('Task Add done')
     return delay
