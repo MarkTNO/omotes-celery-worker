@@ -61,5 +61,8 @@ services:
       rabbitmq:
         condition: service_healthy
 
+      application:
+        condition: service_started
+
 volumes:
   flower_storage:

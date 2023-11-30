@@ -17,6 +17,7 @@ def add(self, x, y):
     delay = 10 * random.random()
     for step in range(5):
         time.sleep(delay / 5)  # Simulate a long task
-        self.update_state(state='PROGRESS', meta={'progress': step / 4})
+        # self.update_state(state='PROGRESS', meta={'progress': step / 4})
+        self.send_event('task-progress-update', progress={'progress': step / 4})
     print('Task Add done')
     return delay

@@ -18,6 +18,7 @@ def multiply(self, x, y):
     print(f"self: {self}, x:  {x}, y: {y}")
     for step in range(5):
         time.sleep(delay / 5)  # Simulate a long task
-        self.update_state(state='PROGRESS', meta={'progress': step / 4})
+        # self.update_state(state='PROGRESS', meta={'progress': step / 4})
+        self.send_event('task-progress-update', progress={'progress': step / 4})
     print('Task Multiply done')
     return delay

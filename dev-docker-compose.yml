@@ -40,6 +40,9 @@ services:
       - flower_storage:/data
     ports:
       - "8889:8888"
+    depends_on:
+      application:
+        condition: service_started
 
 volumes:
   flower_storage:
